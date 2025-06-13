@@ -1,6 +1,4 @@
-// Weapon class
-
-class Weapon {
+export class Weapon {
   constructor(name, damageMin, damageMax) {
     this.name = name;
     this.damageMin = damageMin;
@@ -12,18 +10,14 @@ class Weapon {
   }
 }
 
-// Armor class
-
-class Armor {
+export class Armor {
   constructor(name, defense) {
     this.name = name;
     this.defense = defense;
   }
 }
 
-// Character class
-
-class Character {
+export class Character {
   constructor(name, strength, agility, endurance, hp, weapon, armor) {
     this.name = name;
     this.strength = strength;
