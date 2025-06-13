@@ -83,4 +83,16 @@ class Character {
             this.stamina = 0;
         }
     }
+
+    regenerateStamina(amount) {
+        this.stamina += amount;
+        if (this.stamina > this.maxStamina) {
+            this.stamina = this.maxStamina;
+        }
+    }
+
+    resetForFight() {
+        this.hp = this.maxHp;
+        this.stamina = this.maxStamina;
+    }
 }
