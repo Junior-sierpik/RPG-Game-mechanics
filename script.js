@@ -150,3 +150,114 @@ function assignRandomEquipment(character, weapons, armors) {
     character.equipWeapon(randomWeapon);
     character.equipArmor(randomArmor);
 }
+
+function simulateTurn(attacker, defender) {
+    const hitChance = attacker.getHitChance();
+    const dodgeChance = defender.getDodgeChance();
+    const hitRoll = Math.random() * 100;
+    const dodgeRoll = Math.random() * 100;
+
+    attacker.consumeStamina(10);
+    defender.regenerateStamina(5);
+
+    if (hitRoll > hitChance) {
+        return;
+    }
+
+    if (dodgeRoll < dodgeChance) {
+        defender.consumeStamina(5);
+        return;
+    }
+
+    const rawDamage = attacker.getTotalDamage();
+    const finalDamage = Math.max(1, rawDamage - defender.getTotalDefense());
+
+    defender.takeDamage(finalDamage);
+}
+
+function simulateFight(characterA, characterB) {
+    characterA.resetForFight();
+    characterB.resetForFight();
+
+    let turn = 0;
+    const maxTurns = 200;
+
+    while (!characterA.isDefeated() && !characterB.isDefeated() && turn < maxTurns) {
+        turn++;
+
+        if (!characterA.isDefeated()) {
+            simulateTurn(characterA, characterB);
+            if (characterB.isDefeated()) {
+                return characterA;
+            }
+        }
+
+        if (!characterB.isDefeated()) {
+            simulateTurn(characterB, characterA);
+            if (characterA.isDefeated()) {
+                return characterB;
+            }
+        }
+    }
+
+    return null;
+}
+
+function runOVerallSimulation(heroes, numSimulationsPerPair, outputElement) {
+    outputElement.innerHtml = '';
+    const appendToOutput = (text) => {
+        outputElement.innerHtml += text + '\n';
+    }
+
+    const battleResults = new Map();
+
+    heroes.forEach(hero => {
+        battleResults.set(hero.name, {wins: 0, losses: 0, draws: 0, totalFights: 0});
+    });
+
+    appendToOutput("Rozpoczynanie symulacji...");
+    appendToOutput(`Przeprowadzam ${numSimulationsPerPair} walk na każdą parę bohaterów.`);
+    appendToOutput("-----------------------\n");
+
+    for (let i = 0; i < heroes.length; i++) {
+        for (let j = i + 1; j < heroes.length; j++) {
+            const hero1 = heroes[i];
+            const hero2 = heroes[j];
+
+            for (let k = 0; k < numSimulationsPerPair; k++) {
+                const winner = simulateFight(hero1, hero2);
+
+                if (winner === hero1) {
+                    battleResults.get(hero1.name).wins++;
+                    battleResults.get(hero2.name).losses++;
+                } else if (winner === hero2) {
+                    battleResults.get(hero2.name).wins++;
+                    battleResults.get(hero1.name).losses++;
+                } else {
+                    battleResults.get(hero1.name).draws++;
+                    battleResults.get(hero2.name).draws++;
+                }
+                battleResults.get(hero1.name).totalFights++;
+                battleResults.get(hero2.name).totalFights++;
+            }
+        }
+    }
+
+    appendToOutput("---Wynik Symulacji ---");
+    appendToOutput("-----------------");
+
+    const sortedResults = Array.from(battleResults.entries()).sort((a,b) => {
+        const probA = a[1].totalFights > 0 ? (a[1].wins / a[1].totalFights) : 0;
+        const probB = b[1].totalFights > 0 ? (a[1].wins / a[1].totalFights) : 0;
+        return probB - probA;
+    })
+
+    sortedResults.forEach(([name, data]) => {
+        const winProbability = data.totalFights > 0 ? (data.wins / data.totalFights) * 100 : 0;
+        appendToOutput(`${name}: Wygrane: ${data.wins}, Przegrane: ${data.losses}, Remisy: ${data.draws}, Walki ogółem: ${data.totalFights}`);
+        appendToOutput(`Prawdopodobieństwo zwycięstwa: ${winProbability.toFixed(2)}%`);
+        appendToOutput("--------------------------");
+    });
+
+    appendToOutput("\nSymulacja zakończona!");
+}
