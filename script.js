@@ -20,5 +20,67 @@ class Character {
         this.losses = 0;
     }
 
-    
+    equipWeapon(weapon) {
+        this.equipWeapon = weapon;
+    }
+
+    equipArmor(armor) {
+        this.equipArmor = armor;
+    }
+
+    getTotalDamage() {
+        let total = this.baseDamage;
+        if (this.equipWeapon) {
+            total += this.equipWeapon.damageModifier;
+        }
+
+        if (this.stamina < (this.maxStamina / 4)) {
+            total *= 0.5;
+        } else if (this.stamina < (this.maxStamina) / 2) {
+            total *= 0.8;
+        }
+        return Math.max(1, total);
+    }
+
+    getTotalDefense() {
+        let total = this.baseDefense;
+        if (this.equipArmor) {
+            total += this.equipArmor.defenseModifier;
+        }
+        return total;
+    }
+
+    getHitChance() {
+        let chance = 70 + (this.daxterity * 0.5);
+        if (this.equippedWeapon && this.equippedWeapon.type === 'bow') {
+            chance += 5;
+        }
+        return Math.min(95, chance);
+    }
+
+    getDodgeChance() {
+        let chance = 10 + (this.daxterity * 0.7);
+        if (this.stamina < (this.maxStamina / 3)) {
+            chance += 0.5;
+        }
+        return Math.min(75, chance);
+    }
+
+    takeDamage(amount) {
+        this.hp -= amount;
+        if (this.hp < 0) {
+            this.hp = 0;
+        } 
+    }
+
+    isDefeated() {
+        return this.hp <= 0;
+    }
+
+    consumeStamina(amount) {
+        this.stamina -= amount;
+        if (this.stamina < 0) {
+            this.stamina = 0;
+        }
+    }
 }
