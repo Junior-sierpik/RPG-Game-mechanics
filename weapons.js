@@ -40,3 +40,5 @@ class Character {
     this.currentHp = this.maxHp;
   }
 }
+
+Checking
