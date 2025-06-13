@@ -101,7 +101,7 @@ class Weapon {
     constructor(name, damageModifier, type = 'melee') {
         this.name = name;
         this.damageModifier = damageModifier;
-        this.type = type; // np. 'melee', 'ranged', 'magic'
+        this.type = type;
     }
 }
 
@@ -109,6 +109,44 @@ class Armor {
     constructor(name, defenseModifier, type = 'light') {
         this.name = name;
         this.defenseModifier = defenseModifier;
-        this.type = type; // np. 'light', 'medium', 'heavy'
+        this.type = type; 
     }
+}
+
+function generateRandomCharacter(name) {
+    const strength = Math.floor(Math.random() * 16) + 10;
+    const dexterity = Math.floor(Math.random() * 16) + 10;
+    const constitution = Math.floor(Math.random() * 16) + 10;
+    const intelligence = Math.floor(Math.random() * 16) + 10;
+
+    return new Character(name, strength, dexterity, constitution, intelligence);
+}
+
+function generateWeapons() {
+    return [
+        new Weapon('Drewniany Miecz', 5),
+        new Weapon('Żelazny Topór', 10),
+        new Weapon('Sztylet Zręczności', 7, 'melee'),
+        new Weapon('Krótki Łuk', 8, 'bow'),
+        new Weapon('Wielki Miecz', 15),
+        new Weapon('Kostur Maga', 6, 'magic'),
+        new Weapon('Srebrny Sztylet', 9)
+    ];
+}
+
+function generateArmors() {
+    return [
+        new Armor('Skórzana Zbroja', 3, 'light'),
+        new Armor('Kolczuga', 7, 'medium'),
+        new Armor('Płytowa Zbroja', 12, 'heavy'),
+        new Armor('Tunika Maga', 2, 'light'),
+        new Armor('Haftowana Szata', 4)
+    ];
+}
+
+function assignRandomEquipment(character, weapons, armors) {
+    const randomWeapon = weapons[Math.floor(Math.random() * weapons.length)];
+    const randomArmor = armors[Math.floor(Math.random() * armors.length)];
+    character.equipWeapon(randomWeapon);
+    character.equipArmor(randomArmor);
 }
