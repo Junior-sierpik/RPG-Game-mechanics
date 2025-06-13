@@ -261,3 +261,36 @@ function runOVerallSimulation(heroes, numSimulationsPerPair, outputElement) {
 
     appendToOutput("\nSymulacja zakończona!");
 }
+
+function startSimulation() {
+    const startButton = document.getElementById('startButton');
+    const resultsContainer = document.getElementById('results-container');
+    const simulationOutput = document.getElementById('simulation-output');
+
+    startButton.disabled = true;
+    resultsContainer.style.display = 'block';
+
+    simulationOutput.textContent = 'Generowanie bohaterów i ekwipunku...'
+
+    const heroes = [];
+    for (let i = 1; i <= 20; i++) {
+        heroes.push(generateRandomCharacter(`Bohater_${i}`));
+    }
+
+    const weaponsPool = generateWeapons();
+    const armorsPool = generateArmors();
+
+    heroes.forEach(hero => {
+        assignRandomEquipment(hero, weaponsPool, armorsPool);
+    });
+
+    const numberOfSimulationsPerPair = 500;
+    runOVerallSimulation(heroes, numberOfSimulationsPerPair, simulationOutput);
+
+    startButton.disabled = false;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const startButton = document.getElementById('startButton');
+    startButton.addEventListener('click', startSimulation);
+});
