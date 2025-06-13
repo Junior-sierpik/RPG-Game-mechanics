@@ -96,3 +96,19 @@ class Character {
         this.stamina = this.maxStamina;
     }
 }
+
+class Weapon {
+    constructor(name, damageModifier, type = 'melee') {
+        this.name = name;
+        this.damageModifier = damageModifier;
+        this.type = type; // np. 'melee', 'ranged', 'magic'
+    }
+}
+
+class Armor {
+    constructor(name, defenseModifier, type = 'light') {
+        this.name = name;
+        this.defenseModifier = defenseModifier;
+        this.type = type; // np. 'light', 'medium', 'heavy'
+    }
+}
