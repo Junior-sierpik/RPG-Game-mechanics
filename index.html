@@ -9,6 +9,18 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    
+    <div class="container rounded-x1">
+        <h1 class="text-3x1 font-bold mb-4 rounded-md">Symulacja Mechaniki Gry</h1>
+        <p class="text-lg leading-7">
+            Kliknij przycisk, aby rozpocząć symylacje walk bohaterów RPG. Wyniki zostaną wyświetlone na stronie.
+        </p>
+        <button id="startButton" class="rounded-lg">Rozpocznij Symulację</button>
+    </div>
+
+    <div id="results-container" class="rounded-x1">
+        <pre id="simulation-output"></pre>
+    </div>
+
+    <script src="script.js" type="module"></script>
 </body>
 </html>
